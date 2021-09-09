@@ -1,0 +1,12 @@
+@import url(_reset.css);
+@import url(_responsive.css);
+
+body {
+    background-color: #151515;
+    color: #fff;
+}
+
+.container {
+    width: 100%;
+    margin: auto;
+}
