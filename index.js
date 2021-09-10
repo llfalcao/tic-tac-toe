@@ -1,5 +1,4 @@
 const GameBoard = (function () {
-    // let _board = ['o', 'x', 'x', 'o', 'o', 'x', 'x', 'o', 'o'];
     let _board = [];
 
     const getBoard = () => _board;
@@ -9,11 +8,12 @@ const GameBoard = (function () {
 })();
 
 const Player = function (mark) {
-    let _mark = mark;
+    let _mark = mark || 'X';
 
     getMark = () => _mark;
+    setMark = (mark) => (_mark = mark);
 
-    return { getMark };
+    return { getMark, setMark };
 };
 
 const DisplayController = (function () {
@@ -22,15 +22,33 @@ const DisplayController = (function () {
     getScore = () => _score;
     setScore = (score) => (_score = score);
 
+    markBoard = (player) => {
+        const blocks = document.querySelectorAll('.block');
+        blocks.forEach((block) => {
+            block.addEventListener('click', () => {
+                let blockId = block.id.slice(6) - 1;
+
+                if (block.classList.contains('active')) {
+                    return;
+                }
+
+                GameBoard.placeMark(blockId, player.getMark());
+                block.classList.add('active');
+                DisplayController.updateBoard();
+            });
+        });
+    };
+
     updateBoard = () => {
         let board = GameBoard.getBoard();
+
         for (let i = 0; i <= 8; i++) {
-            if (board[i] === 'x') {
+            if (board[i] === 'X') {
                 const mark = document.querySelector(
                     `img[data-mark="${i + 1}x"]`
                 );
                 mark.style.display = 'block';
-            } else if (board[i] === 'o') {
+            } else if (board[i] === 'O') {
                 const mark = document.querySelector(
                     `img[data-mark="${i + 1}o"]`
                 );
@@ -39,28 +57,16 @@ const DisplayController = (function () {
         }
     };
 
-    return { getScore, setScore, updateBoard };
+    return { getScore, setScore, markBoard, updateBoard };
 })();
 
-let user;
-
-function selectPlayer() {
-    const form = document.querySelector('#player-info');
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const mark = document.querySelector('input[type="radio"]:checked');
-        user = new Player(mark.value);
-    });
+function selectMark(player) {
+    const mark = document.querySelector('input[type="radio"]:checked');
+    player.setMark(mark.value);
 }
 
-const blocks = document.querySelectorAll('.block');
-blocks.forEach((block) => {
-    block.addEventListener('click', () => {
-        let blockId = block.id.slice(6) - 1;
-        console.log(blockId);
-        GameBoard.placeMark(blockId, user.getMark());
-    });
-});
+const submitBtn = document.querySelector('#player-info button');
+let user = new Player();
+submitBtn.addEventListener('click', selectMark(user));
 
-selectPlayer();
-DisplayController.updateBoard();
+DisplayController.markBoard(user);
