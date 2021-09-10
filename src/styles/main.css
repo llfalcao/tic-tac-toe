@@ -22,15 +22,18 @@ body {
     position: absolute;
     background: #252525;
     width: 300px;
+    border-radius: 0.5rem;
 }
 
 #player-info p,
 #player-info fieldset,
-#player-info legend {
+#player-info legend,
+#player-info button {
     text-align: center;
     display: block;
     margin: 1rem auto;
 }
+
 #player-info input[type='radio'] {
     display: none;
 }
@@ -46,8 +49,31 @@ body {
     transition: 0.2s;
 }
 
+#player-info label img:hover {
+    transform: scale(1.03);
+}
+
 #player-info input:checked + label img {
     box-shadow: 0 0 0 0.2rem rgb(9, 182, 159);
+}
+
+#player-info button {
+    width: 200px;
+    margin-top: 2rem;
+    padding: 0.5rem 0;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    background-image: linear-gradient(to right, rgb(15 128 232) 50%, blue 50%);
+    background-size: 400px;
+    background-position: 200px;
+    color: #fff;
+    transition: 0.3s;
+}
+
+#player-info button:hover {
+    background-position: 400px;
 }
 
 .board {
