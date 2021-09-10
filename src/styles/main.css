@@ -4,9 +4,47 @@
 body {
     background-color: #151515;
     color: #fff;
+    width: 100vw;
 }
 
 .container {
     width: 100%;
+    min-height: 70vh;
+    height: 100vh;
     margin: auto;
+    display: flex;
+    align-items: center;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: max-content;
+    background-color: #555;
+    gap: 0.5rem;
+    margin: auto;
+    vertical-align: middle;
+}
+
+.block {
+    background-color: #151515;
+    width: 100px;
+    aspect-ratio: 1;
+    position: relative;
+}
+
+.block img {
+    position: absolute;
+    width: 60%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    transition: 0.3s;
+    opacity: 0.9;
+}
+
+.block img:hover {
+    transform: translate(-50%, -50%) scale(1.03);
+    opacity: 1;
 }
