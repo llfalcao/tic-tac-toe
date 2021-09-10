@@ -5,6 +5,8 @@ body {
     background-color: #151515;
     color: #fff;
     width: 100vw;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .container {
@@ -14,6 +16,38 @@ body {
     margin: auto;
     display: flex;
     align-items: center;
+}
+
+#player-info {
+    position: absolute;
+    background: #252525;
+    width: 300px;
+}
+
+#player-info p,
+#player-info fieldset,
+#player-info legend {
+    text-align: center;
+    display: block;
+    margin: 1rem auto;
+}
+#player-info input[type='radio'] {
+    display: none;
+}
+
+#player-info label img {
+    width: 100px;
+    margin: 0 0.5rem;
+    padding: 0.8rem;
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 0 10px #000;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#player-info input:checked + label img {
+    box-shadow: 0 0 0 0.2rem rgb(9, 182, 159);
 }
 
 .board {
