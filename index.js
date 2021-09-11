@@ -62,11 +62,14 @@ const DisplayController = (function () {
 
 function selectPlayer(player) {
     const mark = document.querySelector('input[type="radio"]:checked');
+    const form = document.querySelector('#player-info');
     player.setMark(mark.value);
+    form.classList.add('hidden');
 }
 
-const submitBtn = document.querySelector('#player-info button');
 let user = new Player();
-submitBtn.addEventListener('click', selectPlayer(user));
+const submitBtn = document.querySelector('#player-info button');
+console.log(submitBtn);
 
+submitBtn.addEventListener('click', async () => selectPlayer(user));
 DisplayController.startGame();

@@ -1,4 +1,5 @@
 @import url(_reset.css);
+@import url(_form.css);
 @import url(_responsive.css);
 
 body {
@@ -16,100 +17,6 @@ body {
     margin: auto;
     display: flex;
     align-items: center;
-}
-
-#player-info {
-    position: absolute;
-    background: #252525;
-    width: 300px;
-    border-radius: 0.5rem;
-}
-
-#player-info p,
-#player-info fieldset,
-#player-info legend,
-#player-info button {
-    text-align: center;
-    display: block;
-    margin: 1.5rem auto;
-}
-
-#player-info p {
-    margin: 1rem auto 0;
-}
-
-#player-info fieldset {
-    margin: 0;
-}
-
-#player-info input[type='radio'] {
-    display: none;
-}
-
-.img-wrapper {
-    overflow: hidden;
-    width: 100px;
-    margin: 0 0.5rem;
-    border-radius: 1rem;
-    background-color: #181a1b;
-    display: inline-block;
-    box-shadow: 0 0 10px #000;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-#player-info label img {
-    width: 100%;
-    margin: auto;
-    padding: 0.8rem;
-    transition: 0.2s;
-}
-
-#player-info label img:hover {
-    transform: scale(1.05);
-    opacity: 0.9;
-}
-
-#player-info input:checked + label .img-wrapper {
-    box-shadow: 0 0 0.2rem 0.2rem rgb(0, 175, 122);
-}
-
-#player-info input:checked + label img {
-    transform: scale(1.05);
-}
-
-#player-info button {
-    width: 200px;
-    margin-top: 2rem;
-    padding: 0.2rem 0 0.5rem;
-    font-size: 1.5rem;
-    border: none;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    background-color: transparent;
-    background-image: radial-gradient(#004895 0%, #004895 0%);
-    background-repeat: no-repeat;
-    background-size: 200px 200px;
-    background-position: 0px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    color: #fff;
-}
-
-#player-info button:hover {
-    animation: hover-radius 0.3s forwards;
-    box-shadow: 0 0 3px 2px rgb(51, 51, 51);
-}
-
-@keyframes hover-radius {
-    0% {
-        background-image: radial-gradient(rgb(0, 78, 179) 20%, #004895 20%);
-    }
-    100% {
-        background-image: radial-gradient(rgb(0, 78, 179) 50%, #004895 50%);
-        background-size: 1000px 1000px;
-        background-position: -400px;
-    }
 }
 
 .board {
