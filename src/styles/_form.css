@@ -19,7 +19,7 @@
 #player-info button {
     text-align: center;
     display: block;
-    margin: 2rem auto;
+    margin: 0 auto 2rem;
 }
 
 #player-info p {
@@ -68,7 +68,7 @@
 
 #player-info button {
     width: 200px;
-    margin-top: 2rem;
+    margin: 2rem 0 0;
     padding: 0.2rem 0 0.5rem;
     font-size: 1.5rem;
     border: none;
