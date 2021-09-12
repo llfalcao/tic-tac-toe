@@ -1,33 +1,64 @@
 const GameBoard = (function () {
     let _board = [];
     let _filled = 0;
+
     const getBoard = () => _board;
+
+    const getFilled = () => _filled;
+
     const placeMark = (location, mark) => {
         _board[location] = mark;
         _filled++;
     };
 
-    const updateBoard = () => {
-        let board = GameBoard.getBoard();
+    const validate = () => {
+        const rows = ['', '', ''];
+        const cols = ['', '', ''];
         for (let i = 0; i <= 8; i++) {
-            if (board[i] === 'X') {
+            if (i < 3) {
+                rows[0] += _board[i];
+            } else if (i < 6) {
+                rows[1] += _board[i];
+            } else if (i < 9) {
+                rows[2] += _board[i];
+            }
+            if (i % 3 === 0) {
+                cols[0] += _board[i];
+            } else if (i % 3 === 1) {
+                cols[1] += _board[i];
+            } else if (i % 3 === 2) {
+                cols[2] += _board[i];
+            }
+        }
+        const diag = [
+            [_board[0], _board[4], _board[8]],
+            [_board[2], _board[4], _board[6]],
+        ];
+        const lines = rows.concat(cols, diag);
+        for (let i = 0; i < lines.length; i++) {
+            if (lines[i] === 'XXX' || lines[i] === 'OOO') {
+                return lines[i].charAt(0);
+            }
+        }
+    };
+
+    const updateBoard = () => {
+        for (let i = 0; i <= 8; i++) {
+            if (_board[i] === 'X') {
                 const mark = document.querySelector(
                     `img[data-mark="${i + 1}x"]`
                 );
                 mark.style.display = 'block';
-            } else if (board[i] === 'O') {
+            } else if (_board[i] === 'O') {
                 const mark = document.querySelector(
                     `img[data-mark="${i + 1}o"]`
                 );
                 mark.style.display = 'block';
             }
         }
-        if (_filled === 9) {
-            return 'gameover';
-        }
     };
 
-    return { getBoard, placeMark, updateBoard };
+    return { getBoard, getFilled, placeMark, updateBoard, validate };
 })();
 
 const Player = function (mark, human) {
@@ -35,7 +66,9 @@ const Player = function (mark, human) {
     let _isHuman = human;
 
     const getMark = () => _mark;
+
     const setMark = (mark) => (_mark = mark);
+
     const isHuman = () => _isHuman;
 
     return { getMark, setMark, isHuman };
@@ -43,7 +76,9 @@ const Player = function (mark, human) {
 
 const DisplayController = (function () {
     let _score = [0, 0];
+
     const getScore = () => _score;
+
     const setScore = (score) => (_score = score);
 
     const aiTurn = () => {
@@ -54,13 +89,22 @@ const DisplayController = (function () {
                 available.push(i);
             }
         }
-        let location = Math.floor(Math.random() * available.length);
-        GameBoard.placeMark(available[location], ai.getMark());
+        if (available.length === 0) {
+            return;
+        }
+        let index = Math.floor(Math.random() * (available.length - 1));
+        GameBoard.placeMark(available[index], ai.getMark());
         document
-            .querySelector(`#block-${location + 1}`)
+            .querySelector(`#block-${available[index] + 1}`)
             .classList.add('active');
-
+        let winner;
+        if (GameBoard.getFilled() >= 3) {
+            winner = GameBoard.validate();
+        }
         setTimeout(() => GameBoard.updateBoard(), 500);
+        if (winner != undefined) {
+            endGame(winner);
+        }
     };
 
     const startGame = () => {
@@ -68,13 +112,27 @@ const DisplayController = (function () {
         blocks.forEach((block) => {
             block.addEventListener('click', function onClick() {
                 block.removeEventListener('click', onClick);
+                if (block.classList.contains('active')) {
+                    return;
+                }
                 let blockId = block.id.slice(6) - 1;
                 GameBoard.placeMark(blockId, user.getMark());
                 block.classList.add('active');
+                let winner;
+                if (GameBoard.getFilled() >= 3) {
+                    winner = GameBoard.validate();
+                }
                 GameBoard.updateBoard();
+                if (winner != undefined) {
+                    endGame(winner);
+                }
                 aiTurn();
             });
         });
+    };
+
+    const endGame = (player) => {
+        window.alert(`${player} wins!`);
     };
 
     return { getScore, setScore, startGame };
