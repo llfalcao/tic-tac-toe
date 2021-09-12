@@ -1,41 +1,10 @@
 const GameBoard = (function () {
     let _board = [];
+    let _filled = 0;
     const getBoard = () => _board;
-    const placeMark = (position, mark) => (_board[position] = mark);
-
-    const markBoard = (player) => {
-        const blocks = document.querySelectorAll('.block');
-
-        if (player.isHuman()) {
-            blocks.forEach((block) => {
-                block.addEventListener('click', () => {
-                    let blockId = block.id.slice(6) - 1;
-                    if (block.classList.contains('active')) {
-                        return;
-                    }
-                    GameBoard.placeMark(blockId, player.getMark());
-                    block.classList.add('active');
-                    updateBoard();
-                    DisplayController.toggleTurn();
-                });
-            });
-        } else {
-            let availableSpots = [];
-            for (index in _board) {
-                if (typeof _board[index] === undefined) {
-                    availableSpots.push(index);
-                }
-            }
-            console.log(availableSpots);
-            let markPlacement = Math.floor(
-                Math.random() * availableSpots.length
-            );
-            GameBoard.placeMark(markPlacement, player.getMark());
-            document
-                .querySelector(`#block-${markPlacement + 1}`)
-                .classList.add('active');
-            updateBoard();
-        }
+    const placeMark = (location, mark) => {
+        _board[location] = mark;
+        _filled++;
     };
 
     const updateBoard = () => {
@@ -53,9 +22,12 @@ const GameBoard = (function () {
                 mark.style.display = 'block';
             }
         }
+        if (_filled === 9) {
+            return 'gameover';
+        }
     };
 
-    return { getBoard, placeMark, markBoard, updateBoard };
+    return { getBoard, placeMark, updateBoard };
 })();
 
 const Player = function (mark, human) {
@@ -71,20 +43,41 @@ const Player = function (mark, human) {
 
 const DisplayController = (function () {
     let _score = [0, 0];
-    let _isAITurn = false;
     const getScore = () => _score;
     const setScore = (score) => (_score = score);
-    const toggleTurn = () => (_isAITurn = !_isAITurn);
 
-    const playRound = () => {
-        if (!_isAITurn) {
-            GameBoard.markBoard(user);
-        } else {
-            GameBoard.markBoard(ai);
+    const aiTurn = () => {
+        const board = GameBoard.getBoard();
+        let available = [];
+        for (let i = 0; i <= 8; i++) {
+            if (typeof board[i] !== 'string') {
+                available.push(i);
+            }
         }
+        let location = Math.floor(Math.random() * available.length);
+        GameBoard.placeMark(available[location], ai.getMark());
+        document
+            .querySelector(`#block-${location + 1}`)
+            .classList.add('active');
+
+        setTimeout(() => GameBoard.updateBoard(), 500);
     };
 
-    return { getScore, setScore, playRound, toggleTurn };
+    const startGame = () => {
+        const blocks = document.querySelectorAll('.block');
+        blocks.forEach((block) => {
+            block.addEventListener('click', function onClick() {
+                block.removeEventListener('click', onClick);
+                let blockId = block.id.slice(6) - 1;
+                GameBoard.placeMark(blockId, user.getMark());
+                block.classList.add('active');
+                GameBoard.updateBoard();
+                aiTurn();
+            });
+        });
+    };
+
+    return { getScore, setScore, startGame };
 })();
 
 function selectPlayer() {
@@ -93,7 +86,9 @@ function selectPlayer() {
     const form = document.querySelector('#player-info');
     user = Player(userMark.value, true);
     ai = Player(aiMark.value, false);
-    form.classList.add('hidden');
+    // form.classList.add('hidden');
+    // temp
+    form.remove();
 }
 
 const submitBtn = document.querySelector('#player-info button');
@@ -102,7 +97,5 @@ let ai;
 
 submitBtn.addEventListener('click', () => {
     selectPlayer();
-    DisplayController.playRound();
-    console.log('a');
-    DisplayController.playRound();
+    DisplayController.startGame();
 });
