@@ -98,11 +98,12 @@ const DisplayController = (function () {
     const setScore = (score) => (_score = score);
 
     const userTurn = () => {
-        if (_turn === 9 || _winner.mark !== undefined) {
-            return;
-        } else {
-            _turn++;
-        }
+        // if (_turn === 9) {
+        //     endGame('draw');
+        //     return;
+        // } else {
+        //     _turn++;
+        // }
         const blocks = document.querySelectorAll('.block');
         blocks.forEach((block) => {
             block.addEventListener('click', function onClick() {
@@ -119,6 +120,11 @@ const DisplayController = (function () {
                 GameBoard.updateBoard();
                 if (_winner.mark === user.getMark()) {
                     endGame(_winner);
+                    return;
+                }
+                if (++_turn === 9) {
+                    endGame('draw');
+                    return;
                 }
                 aiTurn();
             });
@@ -126,6 +132,7 @@ const DisplayController = (function () {
     };
 
     const aiTurn = () => {
+        _turn++;
         if (_winner.mark !== undefined) {
             return;
         }
@@ -151,6 +158,7 @@ const DisplayController = (function () {
             GameBoard.updateBoard();
             if (_winner.mark === ai.getMark()) {
                 endGame(_winner);
+                return;
             }
         }, 500);
 
@@ -161,21 +169,26 @@ const DisplayController = (function () {
         userTurn();
     };
 
-    const endGame = (winner) => {
+    const endGame = (result) => {
+        if (result === 'draw') {
+            document.querySelector('h2').textContent = 'DRAW!';
+            return;
+        } else {
+            document.querySelector('h2').textContent = 'WINNER!';
+        }
         const blocks = document.querySelectorAll('.block');
         blocks.forEach((block) => {
             block.classList.add('locked');
         });
         const lineClasses = [
             'line',
-            winner.direction,
-            `${winner.direction}-${winner.position}`,
+            result.direction,
+            `${result.direction}-${result.position}`,
         ];
         const line = document.createElement('div');
         line.classList.add(...lineClasses);
         document.querySelector('.board').appendChild(line);
-        document.querySelector('h2').textContent = 'WINNER!';
-        console.log(`${winner.mark} wins!`);
+        console.log(`${result.mark} wins!`);
     };
 
     return { getScore, setScore, startGame };
