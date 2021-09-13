@@ -1,7 +1,8 @@
 #player-info {
     position: absolute;
     left: 50%;
-    transform: translateX(-50%);
+    top: 20vh;
+    transform: translate(-50%, 0);
     background: #252525;
     width: 350px;
     aspect-ratio: 1;

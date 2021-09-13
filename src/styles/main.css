@@ -11,14 +11,20 @@ body {
         Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    padding-top: 3rem;
+}
+
 /* Page Container */
 .container {
     width: 100%;
     min-height: 70vh;
-    height: 100vh;
+    max-height: 100vh;
     margin: auto;
-    display: flex;
-    align-items: center;
+    padding-top: 20vh;
 }
 
 /* Tic-Tac-Toe Board Container */
@@ -29,7 +35,6 @@ body {
     background-color: #555;
     gap: 0.5rem;
     margin: auto;
-    vertical-align: middle;
     position: relative;
 }
 

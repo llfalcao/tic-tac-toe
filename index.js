@@ -117,7 +117,7 @@ const DisplayController = (function () {
                     _winner = GameBoard.validate();
                 }
                 GameBoard.updateBoard();
-                if (_winner.mark !== undefined) {
+                if (_winner.mark === user.getMark()) {
                     endGame(_winner);
                 }
                 aiTurn();
@@ -147,10 +147,13 @@ const DisplayController = (function () {
         if (_turn >= 3) {
             _winner = GameBoard.validate();
         }
-        setTimeout(() => GameBoard.updateBoard(), 500);
-        if (_winner.mark !== undefined) {
-            endGame(_winner);
-        }
+        setTimeout(() => {
+            GameBoard.updateBoard();
+            if (_winner.mark === ai.getMark()) {
+                endGame(_winner);
+            }
+        }, 500);
+
         userTurn();
     };
 
@@ -163,7 +166,6 @@ const DisplayController = (function () {
         blocks.forEach((block) => {
             block.classList.add('locked');
         });
-
         const lineClasses = [
             'line',
             winner.direction,
@@ -172,21 +174,30 @@ const DisplayController = (function () {
         const line = document.createElement('div');
         line.classList.add(...lineClasses);
         document.querySelector('.board').appendChild(line);
+        document.querySelector('h2').textContent = 'WINNER!';
         console.log(`${winner.mark} wins!`);
     };
 
     return { getScore, setScore, startGame };
 })();
 
+function removeTransition(e) {
+    if (e.propertyName !== 'transform') return;
+    e.target.classList.remove('highlight');
+}
+
 function selectPlayer() {
     const userMark = document.querySelector('input[type="radio"]:checked');
     const aiMark = document.querySelector('input[type="radio"]:not(:checked)');
     const form = document.querySelector('#player-info');
-    user = Player(userMark.value, true);
-    ai = Player(aiMark.value, false);
-    // form.classList.add('hidden');
-    // temp
-    form.remove();
+    try {
+        user = Player(userMark.value, true);
+        ai = Player(aiMark.value, false);
+    } catch (error) {
+        user = Player('X', true);
+        ai = Player('O', false);
+    }
+    form.classList.add('hidden');
 }
 
 const submitBtn = document.querySelector('#player-info button');
