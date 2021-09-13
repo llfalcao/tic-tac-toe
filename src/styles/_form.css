@@ -3,7 +3,7 @@
     left: 50%;
     top: 20vh;
     transform: translate(-50%, 0);
-    background: #252525;
+    background-color: #252525;
     width: 350px;
     aspect-ratio: 1;
     border-radius: 0.5rem;
@@ -12,6 +12,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    box-shadow: 0 0 8px #090909;
 }
 
 #player-info p,

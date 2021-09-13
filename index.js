@@ -35,7 +35,7 @@ const GameBoard = (function () {
         let lineDirection;
         let position;
         for (let i = 0; i < lines.length; i++) {
-            if (lines[i] === 'XXX' || lines[i] === 'OOO') {
+            if (lines[i] === 'xxx' || lines[i] === 'ooo') {
                 if (i < 3) {
                     lineDirection = 'row';
                     position = i + 1;
@@ -58,12 +58,12 @@ const GameBoard = (function () {
 
     const updateBoard = () => {
         for (let i = 0; i <= 8; i++) {
-            if (_board[i] === 'X') {
+            if (_board[i] === 'x') {
                 const mark = document.querySelector(
                     `img[data-mark="${i + 1}x"]`
                 );
                 mark.style.display = 'block';
-            } else if (_board[i] === 'O') {
+            } else if (_board[i] === 'o') {
                 const mark = document.querySelector(
                     `img[data-mark="${i + 1}o"]`
                 );
@@ -98,12 +98,6 @@ const DisplayController = (function () {
     const setScore = (score) => (_score = score);
 
     const userTurn = () => {
-        // if (_turn === 9) {
-        //     endGame('draw');
-        //     return;
-        // } else {
-        //     _turn++;
-        // }
         const blocks = document.querySelectorAll('.block');
         blocks.forEach((block) => {
             block.addEventListener('click', function onClick() {
@@ -171,33 +165,35 @@ const DisplayController = (function () {
 
     const endGame = (result) => {
         if (result === 'draw') {
+            document
+                .querySelector('#winner-x')
+                .setAttribute('style', 'display: inline-block');
+            document
+                .querySelector('#winner-o')
+                .setAttribute('style', 'display: inline-block');
             document.querySelector('h2').textContent = 'DRAW!';
             return;
-        } else {
-            document.querySelector('h2').textContent = 'WINNER!';
         }
         const blocks = document.querySelectorAll('.block');
         blocks.forEach((block) => {
             block.classList.add('locked');
         });
-        const lineClasses = [
+        const strikethrough = [
             'line',
             result.direction,
             `${result.direction}-${result.position}`,
         ];
         const line = document.createElement('div');
-        line.classList.add(...lineClasses);
+        line.classList.add(...strikethrough);
         document.querySelector('.board').appendChild(line);
-        console.log(`${result.mark} wins!`);
+        document
+            .querySelector(`#winner-${result.mark}`)
+            .setAttribute('style', 'display: block');
+        document.querySelector('h2').textContent = 'WINNER!';
     };
 
     return { getScore, setScore, startGame };
 })();
-
-function removeTransition(e) {
-    if (e.propertyName !== 'transform') return;
-    e.target.classList.remove('highlight');
-}
 
 function selectPlayer() {
     const userMark = document.querySelector('input[type="radio"]:checked');
@@ -207,8 +203,8 @@ function selectPlayer() {
         user = Player(userMark.value, true);
         ai = Player(aiMark.value, false);
     } catch (error) {
-        user = Player('X', true);
-        ai = Player('O', false);
+        user = Player('x', true);
+        ai = Player('o', false);
     }
     form.classList.add('hidden');
 }

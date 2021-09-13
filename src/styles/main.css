@@ -15,7 +15,7 @@ h2 {
     font-size: 1.5rem;
     font-weight: 600;
     text-align: center;
-    padding-top: 3rem;
+    padding-top: 1rem;
 }
 
 /* Page Container */
@@ -131,4 +131,19 @@ h2 {
 }
 .diag-2 {
     transform: rotate(45deg);
+}
+
+#result {
+    display: block;
+    margin: auto;
+    width: max-content;
+}
+
+#winner-x,
+#winner-o {
+    width: 60px;
+    margin: 2rem auto 0;
+    border-radius: 1rem;
+    display: inline-block;
+    transition: 1s;
 }

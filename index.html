@@ -16,9 +16,9 @@
             <form id="player-info">
                 <p>Tic-Tac-Toe</p>
                 <fieldset>
-                    <legend>Start game or choose your player</legend>
+                    <legend>Start the game or choose your player</legend>
 
-                    <input type="radio" id="radio-x" name="player" value="X" />
+                    <input type="radio" id="radio-x" name="player" value="x" />
                     <label for="radio-x"
                         ><div class="img-wrapper">
                             <img
@@ -28,7 +28,7 @@
                         </div>
                     </label>
 
-                    <input type="radio" id="radio-o" name="player" value="O" />
+                    <input type="radio" id="radio-o" name="player" value="o" />
                     <label for="radio-o"
                         ><div class="img-wrapper">
                             <img
@@ -153,7 +153,19 @@
                 </div>
             </div>
 
-            <div class="result">
+            <div id="result">
+                <img
+                    id="winner-x"
+                    alt="X"
+                    src="data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjZTE0ODQ4IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgNjYgNjYiIHZlcnNpb249IjEuMSIgeD0iMHB4IiB5PSIwcHgiPjx0aXRsZT5jcm9zczwvdGl0bGU+PGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+PGcgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+PHBhdGggZD0iTTQ1LjAyMzg2MzYsMzMuMDExNjcwMyBMNjUuNTI5OTYwMywxMi41MDU1NzM2IEw1My41MDkxNDUsMC40ODQ3NTgzNjQgTDMzLjAwMzA0ODMsMjAuOTkwODU1IEwxMi40OTY5NTE3LDAuNDg0NzU4MzY0IEwwLjQ3NjEzNjM5MywxMi41MDU1NzM2IEwyMC45ODIyMzMsMzMuMDExNjcwMyBMMC40NzYxMzYzOTMsNTMuNTE3NzY3IEwxMi40OTY5NTE3LDY1LjUzODU4MjIgTDMzLjAwMzA0ODMsNDUuMDMyNDg1NiBMNTMuNTA5MTQ1LDY1LjUzODU4MjIgTDY1LjUyOTk2MDMsNTMuNTE3NzY3IEw0NS4wMjM4NjM2LDMzLjAxMTY3MDMgWiIgZmlsbD0iI2UxNDg0OCI+PC9wYXRoPjwvZz48L3N2Zz4="
+                    style="display: none"
+                />
+                <img
+                    id="winner-o"
+                    alt="O"
+                    src="data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjNDg5ZWUxIiB4bWxuczp4PSJodHRwOi8vbnMuYWRvYmUuY29tL0V4dGVuc2liaWxpdHkvMS4wLyIgeG1sbnM6aT0iaHR0cDovL25zLmFkb2JlLmNvbS9BZG9iZUlsbHVzdHJhdG9yLzEwLjAvIiB4bWxuczpncmFwaD0iaHR0cDovL25zLmFkb2JlLmNvbS9HcmFwaHMvMS4wLyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDEwMCAxMDA7IiB4bWw6c3BhY2U9InByZXNlcnZlIj48c3dpdGNoPjxmb3JlaWduT2JqZWN0IHJlcXVpcmVkRXh0ZW5zaW9ucz0iaHR0cDovL25zLmFkb2JlLmNvbS9BZG9iZUlsbHVzdHJhdG9yLzEwLjAvIiB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIj48L2ZvcmVpZ25PYmplY3Q+PGcgaTpleHRyYW5lb3VzPSJzZWxmIj48Zz48cGF0aCBkPSJNNTI3My4xLDI0MDAuMXYtMmMwLTIuOC01LTQtOS43LTRzLTkuNywxLjMtOS43LDR2MmMwLDEuOCwwLjcsMy42LDIsNC45bDUsNC45YzAuMywwLjMsMC40LDAuNiwwLjQsMXY2LjQgICAgIGMwLDAuNCwwLjIsMC43LDAuNiwwLjhsMi45LDAuOWMwLjUsMC4xLDEtMC4yLDEtMC44di03LjJjMC0wLjQsMC4yLTAuNywwLjQtMWw1LjEtNUM1MjcyLjQsMjQwMy43LDUyNzMuMSwyNDAxLjksNTI3My4xLDI0MDAuMXogICAgICBNNTI2My40LDI0MDBjLTQuOCwwLTcuNC0xLjMtNy41LTEuOHYwYzAuMS0wLjUsMi43LTEuOCw3LjUtMS44YzQuOCwwLDcuMywxLjMsNy41LDEuOEM1MjcwLjcsMjM5OC43LDUyNjguMiwyNDAwLDUyNjMuNCwyNDAweiI+PC9wYXRoPjxwYXRoIGQ9Ik01MjY4LjQsMjQxMC4zYy0wLjYsMC0xLDAuNC0xLDFjMCwwLjYsMC40LDEsMSwxaDQuM2MwLjYsMCwxLTAuNCwxLTFjMC0wLjYtMC40LTEtMS0xSDUyNjguNHoiPjwvcGF0aD48cGF0aCBkPSJNNTI3Mi43LDI0MTMuN2gtNC4zYy0wLjYsMC0xLDAuNC0xLDFjMCwwLjYsMC40LDEsMSwxaDQuM2MwLjYsMCwxLTAuNCwxLTFDNTI3My43LDI0MTQuMSw1MjczLjMsMjQxMy43LDUyNzIuNywyNDEzLjd6Ij48L3BhdGg+PHBhdGggZD0iTTUyNzIuNywyNDE3aC00LjNjLTAuNiwwLTEsMC40LTEsMWMwLDAuNiwwLjQsMSwxLDFoNC4zYzAuNiwwLDEtMC40LDEtMUM1MjczLjcsMjQxNy41LDUyNzMuMywyNDE3LDUyNzIuNywyNDE3eiI+PC9wYXRoPjwvZz48cGF0aCBkPSJNNTAsOTcuNUMyMy44LDk3LjUsMi41LDc2LjIsMi41LDUwUzIzLjgsMi41LDUwLDIuNVM5Ny41LDIzLjgsOTcuNSw1MFM3Ni4yLDk3LjUsNTAsOTcuNXogTTUwLDIxLjUgICAgYy0xNS43LDAtMjguNSwxMi44LTI4LjUsMjguNVMzNC4zLDc4LjUsNTAsNzguNVM3OC41LDY1LjcsNzguNSw1MFM2NS43LDIxLjUsNTAsMjEuNXoiPjwvcGF0aD48L2c+PC9zd2l0Y2g+PC9zdmc+"
+                    style="display: none"
+                />
                 <h2></h2>
             </div>
         </main>
