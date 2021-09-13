@@ -1,5 +1,6 @@
 @import url(_reset.css);
 @import url(_form.css);
+@import url(_animations.css);
 @import url(_responsive.css);
 
 body {
@@ -10,6 +11,7 @@ body {
         Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+/* Page Container */
 .container {
     width: 100%;
     min-height: 70vh;
@@ -19,6 +21,7 @@ body {
     align-items: center;
 }
 
+/* Tic-Tac-Toe Board Container */
 .board {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -27,6 +30,7 @@ body {
     gap: 0.5rem;
     margin: auto;
     vertical-align: middle;
+    position: relative;
 }
 
 .block {
@@ -36,6 +40,7 @@ body {
     position: relative;
 }
 
+/* Xs and Os */
 .block img {
     position: absolute;
     width: 60%;
@@ -53,14 +58,72 @@ body {
     opacity: 1;
 }
 
-@keyframes increase-size {
-    0% {
-        transform: translate(-50%, -50%) scale(0.2);
-    }
-    75% {
-        transform: translate(-50%, -50%) scale(1.1);
-    }
-    100% {
-        transform: translate(-50%, -50%) scale(1);
-    }
+/* Strikethrough the row/column/diagonal once there's a winner */
+.line {
+    position: absolute;
+    background-size: 200% 200%;
+    background-repeat: no-repeat;
+}
+
+.row {
+    width: 90%;
+    height: 2.5%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-image: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.8) 50%,
+        transparent 50%
+    );
+    animation: strikethrough-left 1s forwards;
+}
+.row-1 {
+    top: 14%;
+}
+.row-2 {
+    bottom: 49%;
+}
+.row-3 {
+    bottom: 15%;
+}
+
+.col {
+    width: 2.5%;
+    height: 90%;
+    top: 50%;
+    transform: translateY(-50%);
+    background-image: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.8) 50%,
+        transparent 50%
+    );
+    animation: strikethrough-top 1s forwards;
+}
+.col-1 {
+    left: 14.5%;
+}
+.col-2 {
+    right: 48.7%;
+}
+.col-3 {
+    right: 14.5%;
+}
+
+.diag {
+    width: 2.8%;
+    height: 120%;
+    left: 49%;
+    top: -10%;
+    background-image: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.8) 50%,
+        transparent 50%
+    );
+    animation: strikethrough-top 1s forwards;
+}
+.diag-1 {
+    transform: rotate(-45deg);
+}
+.diag-2 {
+    transform: rotate(45deg);
 }

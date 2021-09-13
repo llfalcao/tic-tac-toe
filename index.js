@@ -31,11 +31,29 @@ const GameBoard = (function () {
             _board[2] + _board[4] + _board[6],
         ];
         const lines = rows.concat(cols, diag);
+
+        let lineDirection;
+        let position;
         for (let i = 0; i < lines.length; i++) {
             if (lines[i] === 'XXX' || lines[i] === 'OOO') {
-                return lines[i].charAt(0);
+                if (i < 3) {
+                    lineDirection = 'row';
+                    position = i + 1;
+                } else if (i < 6) {
+                    lineDirection = 'col';
+                    position = i - 2;
+                } else if (i < 8) {
+                    lineDirection = 'diag';
+                    position = i - 5;
+                }
+                return {
+                    mark: lines[i].charAt(0),
+                    direction: lineDirection,
+                    position,
+                };
             }
         }
+        return {};
     };
 
     const updateBoard = () => {
@@ -73,14 +91,14 @@ const Player = function (mark, human) {
 const DisplayController = (function () {
     let _score = [0, 0];
     let _turn = 0;
-    let _winner;
+    let _winner = {};
 
     const getScore = () => _score;
 
     const setScore = (score) => (_score = score);
 
     const userTurn = () => {
-        if (_turn === 9 || _winner != undefined) {
+        if (_turn === 9 || _winner.mark !== undefined) {
             return;
         } else {
             _turn++;
@@ -95,12 +113,11 @@ const DisplayController = (function () {
                 let blockId = block.id.slice(6) - 1;
                 GameBoard.placeMark(blockId, user.getMark());
                 block.classList.add('locked');
-
                 if (_turn >= 3) {
                     _winner = GameBoard.validate();
                 }
                 GameBoard.updateBoard();
-                if (_winner != undefined) {
+                if (_winner.mark !== undefined) {
                     endGame(_winner);
                 }
                 aiTurn();
@@ -109,7 +126,7 @@ const DisplayController = (function () {
     };
 
     const aiTurn = () => {
-        if (_winner != undefined) {
+        if (_winner.mark !== undefined) {
             return;
         }
         const board = GameBoard.getBoard();
@@ -131,7 +148,7 @@ const DisplayController = (function () {
             _winner = GameBoard.validate();
         }
         setTimeout(() => GameBoard.updateBoard(), 500);
-        if (_winner != undefined) {
+        if (_winner.mark !== undefined) {
             endGame(_winner);
         }
         userTurn();
@@ -141,13 +158,21 @@ const DisplayController = (function () {
         userTurn();
     };
 
-    const endGame = (player) => {
+    const endGame = (winner) => {
         const blocks = document.querySelectorAll('.block');
         blocks.forEach((block) => {
             block.classList.add('locked');
         });
 
-        console.log(`${player} wins!`);
+        const lineClasses = [
+            'line',
+            winner.direction,
+            `${winner.direction}-${winner.position}`,
+        ];
+        const line = document.createElement('div');
+        line.classList.add(...lineClasses);
+        document.querySelector('.board').appendChild(line);
+        console.log(`${winner.mark} wins!`);
     };
 
     return { getScore, setScore, startGame };
