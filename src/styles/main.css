@@ -169,5 +169,5 @@ h2 {
     width: 60px;
     margin: auto;
     border-radius: 1rem;
-    transition: 1s;
+    animation: opacity-increase 0.7s forwards;
 }

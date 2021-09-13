@@ -3,6 +3,8 @@ const GameBoard = (function () {
 
     const getBoard = () => _board;
 
+    const resetBoard = () => (_board = []);
+
     const placeMark = (location, mark) => {
         _board[location] = mark;
     };
@@ -31,7 +33,6 @@ const GameBoard = (function () {
             _board[2] + _board[4] + _board[6],
         ];
         const lines = rows.concat(cols, diag);
-
         let lineDirection;
         let position;
         for (let i = 0; i < lines.length; i++) {
@@ -57,6 +58,12 @@ const GameBoard = (function () {
     };
 
     const updateBoard = () => {
+        if (_board.length === 0) {
+            const marks = document.querySelectorAll(`img[data-mark]`);
+            marks.forEach((mark) => {
+                mark.removeAttribute('style');
+            });
+        }
         for (let i = 0; i <= 8; i++) {
             if (_board[i] === 'x') {
                 const mark = document.querySelector(
@@ -72,7 +79,7 @@ const GameBoard = (function () {
         }
     };
 
-    return { getBoard, placeMark, updateBoard, validate };
+    return { getBoard, resetBoard, placeMark, updateBoard, validate };
 })();
 
 const Player = function (mark, human) {
@@ -89,50 +96,37 @@ const Player = function (mark, human) {
 };
 
 const DisplayController = (function () {
-    let _score = [0, 0];
     let _turn = 0;
-    let _winner = {};
-    let _gameover = false;
+    let _result = {};
 
-    const getScore = () => _score;
-
-    const setScore = (score) => (_score = score);
-
-    const isGameOver = () => _gameover;
-
-    const toggleGameOver = () => (_gameover = !_gameover);
-
-    const userTurn = () => {
-        const blocks = document.querySelectorAll('.block');
-        blocks.forEach((block) => {
-            block.addEventListener('click', function onClick() {
-                block.removeEventListener('click', onClick);
-                if (block.classList.contains('locked')) {
-                    return;
-                }
-                let blockId = block.id.slice(6) - 1;
-                GameBoard.placeMark(blockId, user.getMark());
-                block.classList.add('locked');
-                if (_turn >= 3) {
-                    _winner = GameBoard.validate();
-                }
-                GameBoard.updateBoard();
-                if (_winner.mark === user.getMark()) {
-                    endGame(_winner);
-                    return;
-                }
-                if (++_turn === 9) {
-                    endGame('draw');
-                    return;
-                }
-                aiTurn();
-            });
+    const userTurn = async (block) => {
+        return new Promise((resolve) => {
+            block.removeEventListener('click', userTurn);
+            if (block.classList.contains('locked')) {
+                return;
+            }
+            let blockId = block.id.slice(6) - 1;
+            GameBoard.placeMark(blockId, user.getMark());
+            block.classList.add('locked');
+            if (_turn >= 3) {
+                _result = GameBoard.validate();
+            }
+            GameBoard.updateBoard();
+            if (_result.mark === user.getMark()) {
+                endGame(_result);
+                return;
+            }
+            if (++_turn === 9) {
+                endGame('draw');
+                return;
+            }
+            resolve();
         });
     };
 
-    const aiTurn = () => {
+    const aiTurn = async () => {
         _turn++;
-        if (_winner.mark !== undefined) {
+        if (_result.mark !== undefined) {
             return;
         }
         const board = GameBoard.getBoard();
@@ -151,16 +145,15 @@ const DisplayController = (function () {
             .querySelector(`#block-${available[index] + 1}`)
             .classList.add('locked');
         if (_turn >= 3) {
-            _winner = GameBoard.validate();
+            _result = GameBoard.validate();
         }
         setTimeout(() => {
             GameBoard.updateBoard();
-            if (_winner.mark === ai.getMark()) {
-                endGame(_winner);
+            if (_result.mark === ai.getMark()) {
+                endGame(_result);
                 return;
             }
         }, 500);
-        userTurn();
     };
 
     const updateScore = (result) => {
@@ -177,7 +170,12 @@ const DisplayController = (function () {
     };
 
     const startGame = () => {
-        userTurn();
+        const blocks = document.querySelectorAll('.block');
+        blocks.forEach((block) => {
+            block.addEventListener('click', () =>
+                userTurn(block).then(() => aiTurn())
+            );
+        });
     };
 
     const endGame = (result) => {
@@ -202,12 +200,34 @@ const DisplayController = (function () {
                 'block';
             document.querySelector('h2').textContent = 'WINNER!';
         }
-
-        toggleGameOver();
         updateScore(result);
+        setTimeout(() => {
+            window.addEventListener('click', restartGame);
+        }, 500);
     };
 
-    return { getScore, setScore, startGame, isGameOver, toggleGameOver };
+    const restartGame = () => {
+        window.removeEventListener('click', restartGame);
+        GameBoard.resetBoard();
+        GameBoard.updateBoard();
+        const blocks = document.querySelectorAll('.block');
+        blocks.forEach((block) => {
+            block.classList.remove('locked');
+        });
+        if (_result.mark) {
+            const lines = document.querySelectorAll('.line');
+            lines.forEach((line) => {
+                line.remove();
+            });
+        }
+        document.querySelector('#winner-x').style.display = 'none';
+        document.querySelector('#winner-o').style.display = 'none';
+        document.querySelector('h2').textContent = '';
+        _turn = 0;
+        _result = {};
+    };
+
+    return { startGame };
 })();
 
 function selectPlayer() {
@@ -224,9 +244,9 @@ function selectPlayer() {
     form.classList.add('hidden');
 }
 
-const submitBtn = document.querySelector('#player-info button');
 let user;
 let ai;
+const submitBtn = document.querySelector('#player-info button');
 
 submitBtn.addEventListener('click', () => {
     selectPlayer();
