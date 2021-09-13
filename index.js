@@ -1,14 +1,10 @@
 const GameBoard = (function () {
     let _board = [];
-    let _filled = 0;
 
     const getBoard = () => _board;
 
-    const getFilled = () => _filled;
-
     const placeMark = (location, mark) => {
         _board[location] = mark;
-        _filled++;
     };
 
     const validate = () => {
@@ -31,8 +27,8 @@ const GameBoard = (function () {
             }
         }
         const diag = [
-            [_board[0], _board[4], _board[8]],
-            [_board[2], _board[4], _board[6]],
+            _board[0] + _board[4] + _board[8],
+            _board[2] + _board[4] + _board[6],
         ];
         const lines = rows.concat(cols, diag);
         for (let i = 0; i < lines.length; i++) {
@@ -58,7 +54,7 @@ const GameBoard = (function () {
         }
     };
 
-    return { getBoard, getFilled, placeMark, updateBoard, validate };
+    return { getBoard, placeMark, updateBoard, validate };
 })();
 
 const Player = function (mark, human) {
@@ -76,12 +72,46 @@ const Player = function (mark, human) {
 
 const DisplayController = (function () {
     let _score = [0, 0];
+    let _turn = 0;
+    let _winner;
 
     const getScore = () => _score;
 
     const setScore = (score) => (_score = score);
 
+    const userTurn = () => {
+        if (_turn === 9 || _winner != undefined) {
+            return;
+        } else {
+            _turn++;
+        }
+        const blocks = document.querySelectorAll('.block');
+        blocks.forEach((block) => {
+            block.addEventListener('click', function onClick() {
+                block.removeEventListener('click', onClick);
+                if (block.classList.contains('locked')) {
+                    return;
+                }
+                let blockId = block.id.slice(6) - 1;
+                GameBoard.placeMark(blockId, user.getMark());
+                block.classList.add('locked');
+
+                if (_turn >= 3) {
+                    _winner = GameBoard.validate();
+                }
+                GameBoard.updateBoard();
+                if (_winner != undefined) {
+                    endGame(_winner);
+                }
+                aiTurn();
+            });
+        });
+    };
+
     const aiTurn = () => {
+        if (_winner != undefined) {
+            return;
+        }
         const board = GameBoard.getBoard();
         let available = [];
         for (let i = 0; i <= 8; i++) {
@@ -96,43 +126,28 @@ const DisplayController = (function () {
         GameBoard.placeMark(available[index], ai.getMark());
         document
             .querySelector(`#block-${available[index] + 1}`)
-            .classList.add('active');
-        let winner;
-        if (GameBoard.getFilled() >= 3) {
-            winner = GameBoard.validate();
+            .classList.add('locked');
+        if (_turn >= 3) {
+            _winner = GameBoard.validate();
         }
         setTimeout(() => GameBoard.updateBoard(), 500);
-        if (winner != undefined) {
-            endGame(winner);
+        if (_winner != undefined) {
+            endGame(_winner);
         }
+        userTurn();
     };
 
     const startGame = () => {
-        const blocks = document.querySelectorAll('.block');
-        blocks.forEach((block) => {
-            block.addEventListener('click', function onClick() {
-                block.removeEventListener('click', onClick);
-                if (block.classList.contains('active')) {
-                    return;
-                }
-                let blockId = block.id.slice(6) - 1;
-                GameBoard.placeMark(blockId, user.getMark());
-                block.classList.add('active');
-                let winner;
-                if (GameBoard.getFilled() >= 3) {
-                    winner = GameBoard.validate();
-                }
-                GameBoard.updateBoard();
-                if (winner != undefined) {
-                    endGame(winner);
-                }
-                aiTurn();
-            });
-        });
+        userTurn();
     };
 
     const endGame = (player) => {
-        window.alert(`${player} wins!`);
+        const blocks = document.querySelectorAll('.block');
+        blocks.forEach((block) => {
+            block.classList.add('locked');
+        });
+
+        console.log(`${player} wins!`);
     };
 
     return { getScore, setScore, startGame };
