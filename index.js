@@ -159,6 +159,19 @@ const DisplayController = (function () {
         userTurn();
     };
 
+    const updateScore = (result) => {
+        if (result === 'draw') {
+            const draw = document.querySelector('#score-draw');
+            draw.textContent = parseInt(draw.textContent) + 1;
+        } else if (user.getMark() === result.mark) {
+            const player = document.querySelector('#score-player');
+            player.textContent = parseInt(player.textContent) + 1;
+        } else {
+            const computer = document.querySelector('#score-computer');
+            computer.textContent = parseInt(computer.textContent) + 1;
+        }
+    };
+
     const startGame = () => {
         userTurn();
     };
@@ -172,24 +185,25 @@ const DisplayController = (function () {
                 .querySelector('#winner-o')
                 .setAttribute('style', 'display: inline-block');
             document.querySelector('h2').textContent = 'DRAW!';
-            return;
+        } else {
+            const blocks = document.querySelectorAll('.block');
+            blocks.forEach((block) => {
+                block.classList.add('locked');
+            });
+            const strikethrough = [
+                'line',
+                result.direction,
+                `${result.direction}-${result.position}`,
+            ];
+            const line = document.createElement('div');
+            line.classList.add(...strikethrough);
+            document.querySelector('.board').appendChild(line);
+            document
+                .querySelector(`#winner-${result.mark}`)
+                .setAttribute('style', 'display: block');
+            document.querySelector('h2').textContent = 'WINNER!';
         }
-        const blocks = document.querySelectorAll('.block');
-        blocks.forEach((block) => {
-            block.classList.add('locked');
-        });
-        const strikethrough = [
-            'line',
-            result.direction,
-            `${result.direction}-${result.position}`,
-        ];
-        const line = document.createElement('div');
-        line.classList.add(...strikethrough);
-        document.querySelector('.board').appendChild(line);
-        document
-            .querySelector(`#winner-${result.mark}`)
-            .setAttribute('style', 'display: block');
-        document.querySelector('h2').textContent = 'WINNER!';
+        updateScore(result);
     };
 
     return { getScore, setScore, startGame };
@@ -216,4 +230,10 @@ let ai;
 submitBtn.addEventListener('click', () => {
     selectPlayer();
     DisplayController.startGame();
+    // window.addEventListener('click', restartGame);
 });
+
+function restartGame() {
+    const form = document.querySelector('#player-info');
+    form.classList.remove('hidden');
+}
