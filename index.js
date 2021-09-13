@@ -92,10 +92,15 @@ const DisplayController = (function () {
     let _score = [0, 0];
     let _turn = 0;
     let _winner = {};
+    let _gameover = false;
 
     const getScore = () => _score;
 
     const setScore = (score) => (_score = score);
+
+    const isGameOver = () => _gameover;
+
+    const toggleGameOver = () => (_gameover = !_gameover);
 
     const userTurn = () => {
         const blocks = document.querySelectorAll('.block');
@@ -155,7 +160,6 @@ const DisplayController = (function () {
                 return;
             }
         }, 500);
-
         userTurn();
     };
 
@@ -178,12 +182,8 @@ const DisplayController = (function () {
 
     const endGame = (result) => {
         if (result === 'draw') {
-            document
-                .querySelector('#winner-x')
-                .setAttribute('style', 'display: inline-block');
-            document
-                .querySelector('#winner-o')
-                .setAttribute('style', 'display: inline-block');
+            document.querySelector('#winner-x').style.display = 'inline-block';
+            document.querySelector('#winner-o').style.display = 'inline-block';
             document.querySelector('h2').textContent = 'DRAW!';
         } else {
             const blocks = document.querySelectorAll('.block');
@@ -198,15 +198,16 @@ const DisplayController = (function () {
             const line = document.createElement('div');
             line.classList.add(...strikethrough);
             document.querySelector('.board').appendChild(line);
-            document
-                .querySelector(`#winner-${result.mark}`)
-                .setAttribute('style', 'display: block');
+            document.querySelector(`#winner-${result.mark}`).style.display =
+                'block';
             document.querySelector('h2').textContent = 'WINNER!';
         }
+
+        toggleGameOver();
         updateScore(result);
     };
 
-    return { getScore, setScore, startGame };
+    return { getScore, setScore, startGame, isGameOver, toggleGameOver };
 })();
 
 function selectPlayer() {
@@ -230,10 +231,4 @@ let ai;
 submitBtn.addEventListener('click', () => {
     selectPlayer();
     DisplayController.startGame();
-    // window.addEventListener('click', restartGame);
 });
-
-function restartGame() {
-    const form = document.querySelector('#player-info');
-    form.classList.remove('hidden');
-}
