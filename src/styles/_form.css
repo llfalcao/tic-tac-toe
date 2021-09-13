@@ -91,32 +91,6 @@
     box-shadow: 0 0 3px 2px rgb(51, 51, 51);
 }
 
-@keyframes hover-radius {
-    0% {
-        background-image: radial-gradient(rgb(0, 78, 179) 20%, #004895 20%);
-    }
-    100% {
-        background-image: radial-gradient(rgb(0, 78, 179) 50%, #004895 50%);
-        background-size: 1000px 1000px;
-        background-position: -400px;
-    }
-}
-
 .hidden {
     animation: hide 0.5s ease forwards;
-}
-
-@keyframes hide {
-    0% {
-        top: 50%;
-        transform: translate(-50%, -50%);
-    }
-    50% {
-        top: 55%;
-        transform: translate(-50%, -50%);
-    }
-    100% {
-        top: -350px;
-        transform: translate(-50%, -50%);
-    }
 }

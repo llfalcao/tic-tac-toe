@@ -1,3 +1,29 @@
+@keyframes hover-radius {
+    0% {
+        background-image: radial-gradient(rgb(0, 78, 179) 20%, #004895 20%);
+    }
+    100% {
+        background-image: radial-gradient(rgb(0, 78, 179) 50%, #004895 50%);
+        background-size: 1000px 1000px;
+        background-position: -400px;
+    }
+}
+
+@keyframes hide {
+    0% {
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+    50% {
+        top: 55%;
+        transform: translate(-50%, -50%);
+    }
+    100% {
+        top: -350px;
+        transform: translate(-50%, -50%);
+    }
+}
+
 @keyframes increase-size {
     0% {
         transform: translate(-50%, -50%) scale(0.2);
