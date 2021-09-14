@@ -1,14 +1,12 @@
 @import url(_reset.css);
 @import url(_form.css);
 @import url(_animations.css);
-@import url(_responsive.css);
 
 body {
     background-color: #151515;
     color: #fff;
     width: 100vw;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Oxygen', sans-serif;
 }
 
 h2 {
@@ -59,6 +57,7 @@ h2 {
     gap: 0.5rem;
     margin: 1rem auto;
     position: relative;
+    opacity: 0;
 }
 
 .block {
@@ -169,5 +168,61 @@ h2 {
     width: 60px;
     margin: auto;
     border-radius: 1rem;
-    animation: opacity-increase 0.7s forwards;
+    animation: appear 0.7s forwards;
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1920px;
+    }
+}
+
+@media (max-width: 400px) {
+    .score-container {
+        padding-left: 0;
+        padding-right: 0.6rem;
+    }
+
+    .score-container div {
+        width: 30vw;
+        font-size: 0.8rem;
+        padding: 0;
+    }
+
+    .score-container--player {
+        width: min-content;
+    }
+
+    #player-info {
+        width: 250px;
+    }
+
+    #player-info p,
+    #player-info fieldset,
+    #player-info legend,
+    #player-info button {
+        margin: 0 auto 1.2rem;
+    }
+
+    #player-info p {
+        margin-top: 1rem;
+        font-size: 1.2rem;
+    }
+
+    #player-info legend {
+        font-size: 0.8rem;
+    }
+
+    .img-wrapper {
+        width: 75px;
+        margin: 0 0.5rem;
+    }
+
+    #submit-btn {
+        width: 150px;
+    }
+
+    .block {
+        width: 28vw;
+    }
 }

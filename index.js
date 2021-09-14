@@ -151,6 +151,9 @@ function selectPlayer() {
         ai = Player('o');
     }
     form.classList.add('hidden');
+    setTimeout(() => {
+        form.remove();
+    }, 1000);
 }
 
 let user;
@@ -159,5 +162,6 @@ const submitBtn = document.querySelector('#player-info button');
 
 submitBtn.addEventListener('click', () => {
     selectPlayer();
+    document.querySelector('.board').style.opacity = '1';
     DisplayController.startGame();
 });
