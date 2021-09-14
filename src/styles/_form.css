@@ -78,23 +78,33 @@
 #submit-btn {
     width: 200px;
     margin: 2rem 0 0;
-    padding: 0.2rem 0 0.4rem;
+    padding: 0.2rem 0 0.38rem;
     font-size: 1.5rem;
     border: none;
     border-radius: 0.25rem;
     cursor: pointer;
     background-color: transparent;
-    background-image: radial-gradient(#000000 0%, #004895 0%);
+    background-image: linear-gradient(
+        to bottom right,
+        #e14848 50%,
+        #e14848 calc(50% + 1px),
+        #004895 50%
+    );
     background-repeat: no-repeat;
-    background-size: 200px 200px;
-    background-position: 0px;
+    background-size: 200% 205%;
+    background-position: 100% 100%;
     font-family: 'Oxygen', sans-serif;
+    text-shadow: 0 0 4px #592020;
     color: #fff;
 }
 
 #player-info #submit-btn:hover {
-    animation: hover-radius 0.3s forwards;
-    box-shadow: 0 0 3px 2px rgb(51, 51, 51);
+    animation: btn-hover 0.5s forwards;
+    box-shadow: 0 0 3px 2px rgb(30, 30, 30);
+}
+
+#submit-btn:active {
+    background-color: #e14848;
 }
 
 /* Hidden form after the game starts */

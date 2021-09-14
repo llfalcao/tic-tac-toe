@@ -1,11 +1,9 @@
-@keyframes hover-radius {
+@keyframes btn-hover {
     0% {
-        background-image: radial-gradient(rgb(0, 78, 179) 20%, #004895 20%);
+        background-position: 100% 100%;
     }
     100% {
-        background-image: radial-gradient(rgb(0, 78, 179) 50%, #004895 50%);
-        background-size: 1000px 1000px;
-        background-position: -400px;
+        background-position: 0% 0%;
     }
 }
 
@@ -60,11 +58,11 @@
 
 @keyframes strikethrough-top {
     0% {
-        background-position: 0 100%;
+        background-position: 0% 100%;
         opacity: 1;
     }
     100% {
-        background-position: 0 0%;
+        background-position: 0% 0%;
         opacity: 1;
     }
 }
