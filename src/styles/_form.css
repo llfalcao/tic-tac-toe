@@ -4,7 +4,7 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    background-color: #252525;
+    background-color: #1c1e1f;
     width: 350px;
     aspect-ratio: 1;
     border-radius: 0.5rem;
@@ -30,7 +30,7 @@
 }
 
 #player-info legend {
-    letter-spacing: 0.05rem;
+    letter-spacing: 0.02rem;
 }
 
 #player-info fieldset {
@@ -47,7 +47,7 @@
     width: 100px;
     margin: 0 0.8rem;
     border-radius: 1rem;
-    background-color: #181a1b;
+    background-color: #131516;
     display: inline-block;
     box-shadow: 0 0 10px #000;
     cursor: pointer;

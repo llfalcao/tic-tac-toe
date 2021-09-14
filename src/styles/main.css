@@ -3,7 +3,7 @@
 @import url(_animations.css);
 
 body {
-    background-color: #151515;
+    background-color: #101112;
     color: #fff;
     width: 100vw;
     font-family: 'Oxygen', sans-serif;
@@ -44,7 +44,6 @@ h2 {
 .score-container div span {
     display: block;
     padding: 0.25rem;
-    font-weight: 600;
     text-align: center;
 }
 
